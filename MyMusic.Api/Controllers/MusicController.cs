@@ -35,4 +35,24 @@ public class MusicsController : ControllerBase {
 
         return Ok(musicResource);
     }
+
+    [HttpPost("")]
+    public async Task<ActionResult<MusicResource>> CreateMusic([FromBody] SaveMusicResource saveMusicResource)
+    {
+        var validator = new SaveMusicResourceValidator();
+        var validationResult = await validator.ValidateAsync(saveMusicResource);
+
+        if (!validationResult.IsValid)
+            return BadRequest(validationResult.Errors); // this needs refining, but for demo it is ok
+        
+        var musicToCreate = _mapper.Map<SaveMusicResource, Music>(saveMusicResource);
+
+        var newMusic = await _musicService.CreateMusic(musicToCreate);
+
+        var music = await _musicService.GetMusicById(newMusic.Id);
+
+        var musicResource = _mapper.Map<Music, MusicResource>(music);
+
+        return Ok(musicResource);
+    }
 }
