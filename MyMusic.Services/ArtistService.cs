@@ -18,6 +18,8 @@ namespace MyMusic.Services
         {
             await _unitOfWork.Artists
                 .AddAsync(newArtist);
+
+            await _unitOfWork.CommitAsync();    
             
             return newArtist;
         }
