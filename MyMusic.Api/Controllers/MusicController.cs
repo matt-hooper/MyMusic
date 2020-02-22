@@ -14,7 +14,8 @@ public class MusicsController : ControllerBase {
 
     public MusicsController(IMusicService musicService, IMapper mapper)
     {
-    this._musicService = musicService;
+        this._mapper = mapper;
+        this._musicService = musicService;
     }
 
     [HttpGet("")]
