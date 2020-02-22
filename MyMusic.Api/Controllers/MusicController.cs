@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using MyMusic.Api.Resources;
 using MyMusic.Core.Models;
 using MyMusic.Core.Services;
 
@@ -20,6 +21,8 @@ public class MusicsController : ControllerBase {
     public async Task<ActionResult<IEnumerable<Music>>> GetAllMusics()
     {
         var musics = await _musicService.GetAllWithArtist();
-        return Ok(musics);
+        var musicResources = _mapper.Map<IEnumerable<Music>, IEnumerable<MusicResource>>(musics);
+
+        return Ok(musicResources);
     }
 }
