@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MyMusic.Api.Resources;
+using MyMusic.Api.Validations;
 using MyMusic.Core.Models;
 using MyMusic.Core.Services;
 
@@ -54,5 +55,31 @@ public class MusicsController : ControllerBase {
         var musicResource = _mapper.Map<Music, MusicResource>(music);
 
         return Ok(musicResource);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<MusicResource>> UpdateMusic(int id, [FromBody] SaveMusicResource saveMusicResource)
+    {
+        var validator = new SaveMusicResourceValidator();
+        var validationResult = await validator.ValidateAsync(saveMusicResource);
+        
+        var requestIsInvalid = id == 0 || !validationResult.IsValid;
+
+        if (requestIsInvalid)
+            return BadRequest(validationResult.Errors); // this needs refining, but for demo it is ok
+        
+        var musicToBeUpdate = await _musicService.GetMusicById(id);
+
+        if (musicToBeUpdate == null)
+            return NotFound();
+
+        var music = _mapper.Map<SaveMusicResource, Music>(saveMusicResource);
+
+        await _musicService.UpdateMusic(musicToBeUpdate, music);
+
+        var updatedMusic = await _musicService.GetMusicById(id);
+        var updatedMusicResource = _mapper.Map<Music, MusicResource>(updatedMusic);
+
+        return Ok(updatedMusicResource);
     }
 }
