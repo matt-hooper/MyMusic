@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MyMusic.Core.Models;
 using MyMusic.Core.Services;
@@ -8,8 +9,9 @@ using MyMusic.Core.Services;
 [ApiController]
 public class MusicsController : ControllerBase {
     private readonly IMusicService _musicService;
+    private readonly IMapper _mapper;
 
-    public MusicsController(IMusicService musicService)
+    public MusicsController(IMusicService musicService, IMapper mapper)
     {
     this._musicService = musicService;
     }
