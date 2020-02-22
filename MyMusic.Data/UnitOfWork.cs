@@ -29,16 +29,6 @@ namespace MyMusic.Data
         public void Dispose()
         {
             _context.Dispose();
-        }
-
-        Task<int> IUnitOfWork.CommitAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        void IDisposable.Dispose()
-        {
-            throw new NotImplementedException();
-        }
+        }        
     }
 }
