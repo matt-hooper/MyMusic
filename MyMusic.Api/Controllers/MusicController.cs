@@ -26,4 +26,13 @@ public class MusicsController : ControllerBase {
 
         return Ok(musicResources);
     }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<MusicResource>> GetMusicById(int id)
+    {
+        var music = await _musicService.GetMusicById(id);
+        var musicResource = _mapper.Map<Music, MusicResource>(music);
+
+        return Ok(musicResource);
+    }
 }
